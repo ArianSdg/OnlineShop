@@ -51,6 +51,10 @@ public class Main {
         Shop shop2 = new Shop("ZohaKala","www.zohakala.com","09906431995");
         System.out.println("Enter your desired website Address.");
 
+        // first admin of online shop
+        Account firstAdmin = new Account("Arian","12345","Arian@gmail.com",Roles.ADMIN);
+        Shop.accountList.add(firstAdmin);
+
         while (true) {
             String address = scan.next();
             if (!address.equals(shop1.address)) {
@@ -70,24 +74,86 @@ public class Main {
 
                 System.out.println("Choose your role: \n{ USER } \n{ SELLER }\n{ ADMIN }");
                 String role = scan.next();
-                if (role.equals(Roles.USER.toString())) { // your role as a User
-                    Account userAccount = register(username, password, emailAddress, phoneNumber, userAddress);
-                    Shop.accountList.add(userAccount);
 
-                    System.out.println("== Login ==");
+                System.out.println("Type 1 to login and type 2 to register!"); // asking whether you have an account or not
+                int enter = scan.nextInt();
+                if (enter == 1) { // login process
+                    for (Account acc : Shop.accountList) {
+                        if (acc.role.toString().equals(role)) {
+                            String loginUsername;
+                            String loginCompanyName;
+                            String loginPassword;
+                            if (role.equals(Roles.USER.toString())) { // login as a User
+                                do {
+                                    System.out.println("== Login ==");
+                                    System.out.print("Username: ");
+                                    loginUsername = scan.next();
+                                    System.out.print("Password: ");
+                                    loginPassword = scan.next();
+                                    AccountManagement.login(loginUsername, loginPassword, acc);
+                                } while (!loginUsername.equals(acc.username) || !loginPassword.equals(acc.getPassword()));
+                            } else if (role.equals(Roles.SELLER.toString())) {
 
-                    String loginUsername;
-                    String loginPassword;
+                            } else if (role.equals(Roles.ADMIN.toString())) {
+                                System.out.println("== Login ==");
+                                do { // user's login
+                                    System.out.print("Username: ");
+                                    loginUsername = scan.next();
+                                    System.out.print("Password: ");
+                                    loginPassword = scan.next();
+                                    AccountManagement.login(loginUsername, loginPassword, acc);
+                                } while (!loginUsername.equals(acc.username) || !loginPassword.equals(acc.getPassword()));
+                            }
+                        } else {
+                            System.out.println("No "+ role + " exist!");
+                        }
+                    }
+                } else if (enter == 2) { // registering process
+                    if (role.equals(Roles.USER.toString())) { // your role as a User
+                        Account userAccount = register(username, password, emailAddress, phoneNumber, userAddress); // registration
+                        Shop.accountList.add(userAccount);
 
-                    do { // user's login
-                        System.out.print("Username: ");
-                        loginUsername = scan.next();
-                        System.out.print("Password: ");
-                        loginPassword = scan.next();
-                        AccountManagement.login(loginUsername, loginPassword, userAccount);
-                    } while (!loginUsername.equals(userAccount.username) || !loginPassword.equals(userAccount.getPassword()));
+                        System.out.println("== Login ==");
+                        String loginUsername;
+                        String loginPassword;
+                        do { // user's login
+                            System.out.print("Username: ");
+                            loginUsername = scan.next();
+                            System.out.print("Password: ");
+                            loginPassword = scan.next();
+                            AccountManagement.login(loginUsername, loginPassword, userAccount);
+                        } while (!loginUsername.equals(userAccount.username) || !loginPassword.equals(userAccount.getPassword()));
+
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+                    } else if (role.equals(Roles.SELLER.toString())) { // your role as a seller
+
+
+                    } else if (role.equals(Roles.ADMIN.toString())) { // your role as an admin
+                        Account adminAccount = register(username, password, emailAddress);
+                        Shop.accountList.add(adminAccount);
+
+                        System.out.println("== Login ==");
+                        String loginUsername;
+                        String loginPassword;
+                        do { // user's login
+                            System.out.print("Username: ");
+                            loginUsername = scan.next();
+                            System.out.print("Password: ");
+                            loginPassword = scan.next();
+                            AccountManagement.login(loginUsername, loginPassword, adminAccount);
+                        } while (!loginUsername.equals(adminAccount.username) || !loginPassword.equals(adminAccount.getPassword()));
+
+                    }
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                }
+
+
+
+
+                if (role.equals(Roles.USER.toString())) {
+                    Account userAccount = Shop.accountList.getLast();
                     System.out.println("Welcome " + userAccount.username + ".");
 
 
@@ -136,38 +202,25 @@ public class Main {
                                     finishChanging = scan.next();
 
                                 } while (!finishChanging.equals("finish")); // finishing the editing of profile
-                            }
-                            System.out.println("If you want to logout, type \"logout\" and your password."); // logout option
-                            logOut = scan.next();
-                            confirmation = scan.next();
-                        } while (!logOut.equals("logout") && !confirmation.equals(userAccount.getPassword())); // boolean for logout option
+                        }
+                        System.out.println("If you want to logout, type \"logout\" and your password."); // logout option
+                        logOut = scan.next();
+                        confirmation = scan.next();
+                    } while (!logOut.equals("logout") && !confirmation.equals(userAccount.getPassword())); // boolean for logout option
 
 
 
 
-                } else if (role.equals(Roles.SELLER.toString())) { // your role as a seller
+                } else if (role.equals(Roles.SELLER.toString())) {
 
 
 
 
 
-                } else if (role.equals(Roles.ADMIN.toString())) { // your role as an admin
-                    Account adminAccount = register(username, password, emailAddress);
-                    Shop.accountList.add(adminAccount);
 
-                    System.out.println("== Login ==");
-                    String loginUsername;
-                    String loginPassword;
-                    do { // user's login
-                        System.out.print("Username: ");
-                        loginUsername = scan.next();
-                        System.out.print("Password: ");
-                        loginPassword = scan.next();
-                        AccountManagement.login(loginUsername, loginPassword, adminAccount);
-                    } while (!loginUsername.equals(adminAccount.username) || !loginPassword.equals(adminAccount.getPassword()));
-
+                } else if (role.equals(Roles.ADMIN.toString())) {
+                    Account adminAccount = Shop.accountList.getLast();
                     System.out.println("Welcome " + adminAccount.username + ".");
-
 
 
                     do {
@@ -196,7 +249,8 @@ public class Main {
                                             String newEmailAddress = scan.next();
                                             accountEditing.editEmail(newEmailAddress, adminAccount);
                                             break;
-                                    }System.out.println("If you no longer want to change your info type \"finish\"");
+                                    }
+                                    System.out.println("If you no longer want to change your info type \"finish\"");
                                     finishChanging = scan.next();
 
                                 } while (!finishChanging.equals("finish"));
