@@ -27,6 +27,8 @@ public class Account {
         this.emailAddress = emailAddress;
         this.role = role;
     }
+    Account() {}
+
 
 
     public String getCompanyName() {

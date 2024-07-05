@@ -3,28 +3,22 @@ public class AccountManagement implements ProfileEdit {
 
     public static void login(String username, String password,Account account) {
         if (account.role.equals(Roles.USER)) {
-            for (Account myAcc : Shop.accountList) {
-                if (myAcc.username.equals(username) && myAcc.getPassword().equals(password)) {
-                    System.out.println("Login successful!");
-                } else {
-                    System.out.println("Failed to login!");
-                }
+            if (account.username.equals(username) && account.getPassword().equals(password)) {
+                System.out.println("Login successful!");
+            } else {
+                System.out.println("Failed to login!");
             }
         } else if (account.role.equals(Roles.SELLER)) {
-            for (Account myAcc : Shop.accountList) {
-                if (myAcc.getCompanyName().equals(username) && myAcc.getPassword().equals(password)) {
-                    System.out.println("Login successful!");
-                } else {
-                    System.out.println("Failed to login!");
-                }
+            if (account.getCompanyName().equals(username) && account.getPassword().equals(password)) {
+                System.out.println("Login successful!");
+            } else {
+                System.out.println("Failed to login!");
             }
         } else if (account.role.equals(Roles.ADMIN)) {
-            for (Account myAcc : Shop.accountList) {
-                if (myAcc.username.equals(username) && myAcc.getPassword().equals(password)) {
-                    System.out.println("Login successful!");
-                } else {
-                    System.out.println("Failed to login!");
-                }
+            if (account.username.equals(username) && account.getPassword().equals(password)) {
+                System.out.println("Login successful!");
+            } else {
+                System.out.println("Failed to login!");
             }
         }
     }
