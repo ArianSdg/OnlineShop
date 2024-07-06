@@ -33,4 +33,7 @@ public class Admin extends Account {
     public void acceptSellerRequest(Request request) {
         request.seller.sellerRequest = true;
     }
+    public void acceptBid(Bid bid) {
+        bid.user.wallet -= bid.totalPrice;
+    }
 }

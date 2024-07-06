@@ -18,4 +18,13 @@ public class Category {
         }
         return null;
     }
+
+    public static void showCategory() {
+        int i = 1;
+        System.out.println("Categories: ");
+        for (Category category : categories) {
+            System.out.print(i + "." + category.name +" \t");
+            i++;
+        }
+    }
 }
