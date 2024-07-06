@@ -4,10 +4,13 @@ public class Seller extends Account {
     private String companyName;
     private String password;
     private ArrayList<Product> products;
+    Roles role;
 
     Seller(String companyName, String password) {
+        super(companyName,password,Roles.SELLER);
         this.companyName = companyName;
         this.password = password;
+        this.role = Roles.SELLER;
     }
 
     public void setCompanyName(String companyName) {

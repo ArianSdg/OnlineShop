@@ -1,10 +1,9 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
 
-    public static Account register(String username, String password, String emailAddress, String phoneNumber, String address) {
+    public static void register(String username, String password, String emailAddress, String phoneNumber, String address) {
         Scanner scan = new Scanner(System.in);
 
         System.out.print("Username: ");
@@ -18,11 +17,11 @@ public class Main {
         System.out.print("Address: ");
         address = scan.next();
 
-
-        return new Account(username, password, emailAddress, phoneNumber, address, Roles.USER);
+        User user = new User(username, password, emailAddress, phoneNumber, address);
+        Shop.accountList.add(user);
     }
 
-    public static Account register(String username, String password, String emailAddress) {
+    public static void register(String username, String password, String emailAddress) {
         Scanner scan = new Scanner(System.in);
 
         System.out.print("Username: ");
@@ -33,10 +32,11 @@ public class Main {
         emailAddress = scan.next();
 
 
-        return new Account(username, password, emailAddress, Roles.ADMIN);
+        Admin admin = new Admin(username, password, emailAddress);
+        Shop.accountList.add(admin);
     }
 
-    public static Account register(String companyName, String password) {
+    public static void register(String companyName, String password) {
         Scanner scan = new Scanner(System.in);
 
         System.out.print("Company name: ");
@@ -44,7 +44,8 @@ public class Main {
         System.out.print("Password: ");
         password = scan.next();
 
-        return new Account(companyName, password, Roles.SELLER);
+        Seller seller = new Seller(companyName,password);
+        Shop.accountList.add(seller);
     }
 
     public static Account myAcc;
@@ -74,103 +75,71 @@ public class Main {
                 String userAddress = "";
 
 
-                System.out.println("Choose your role: \n{ USER } \n{ SELLER }\n{ ADMIN }");
-                String role = scan.next();
 
+
+                int enter;
                 while (myAcc == null) {
-                    System.out.println("Type 1 to login and type 2 to register!"); // asking whether you have an account or not
-                    int enter = scan.nextInt();
-                    if (enter == 1) { // login process
-                        for (Account acc : Shop.accountList) {
-                            if (acc.role.toString().equals(role)) {
-                                String loginUsername;
-                                String loginCompanyName;
-                                String loginPassword;
-                                if (role.equals(Roles.USER.toString())) { // login as a User
-                                    do {
-                                        System.out.println("== Login ==");
-                                        System.out.print("Username: ");
-                                        loginUsername = scan.next();
-                                        System.out.print("Password: ");
-                                        loginPassword = scan.next();
-                                        AccountManagement.login(loginUsername, loginPassword, Shop.accountList.getLast());
-                                    } while (!loginUsername.equals(acc.username) || !loginPassword.equals(acc.getPassword()));
-                                } else if (role.equals(Roles.SELLER.toString())) {
-                                    do {
-                                        System.out.println("== Login ==");
-                                        System.out.print("Company name: ");
-                                        loginCompanyName = scan.next();
-                                        System.out.print("Password: ");
-                                        loginPassword = scan.next();
-                                        AccountManagement.login(loginCompanyName, loginPassword, Shop.accountList.getLast());
-                                    } while (!loginCompanyName.equals(acc.username) || !loginPassword.equals(acc.getPassword()));
-                                } else if (role.equals(Roles.ADMIN.toString())) {
-                                    System.out.println("== Login ==");
-                                    do { // user's login
-                                        System.out.print("Username: ");
-                                        loginUsername = scan.next();
-                                        System.out.print("Password: ");
-                                        loginPassword = scan.next();
-                                        AccountManagement.login(loginUsername, loginPassword, Shop.accountList.getLast());
-                                    } while (!loginUsername.equals(acc.username) || !loginPassword.equals(acc.getPassword()));
-                                }
-                            } else {
-                                System.out.println("No " + role + " exist!");
+                    String role;
+                    do {
+                        System.out.println("Choose your role: \n{ USER } \n{ SELLER }\n{ ADMIN }");
+                        role = scan.next();
+                        System.out.println("Type 1 to register and type 2 to login!"); // asking whether you have an account or not
+                        enter = scan.nextInt();
+                        if (enter == 1) { // registering process
+                            if (role.equals(Roles.USER.toString())) { // your role as a User
+                                register(username, password, emailAddress, phoneNumber, userAddress); // registration
+
+
+                            } else if (role.equals(Roles.SELLER.toString())) { // your role as a seller
+                                register(username, password);
+
+
+                            } else if (role.equals(Roles.ADMIN.toString())) { // your role as an admin
+                                register(username, password, emailAddress);
+
                             }
                         }
-                    } else if (enter == 2) { // registering process
-                        if (role.equals(Roles.USER.toString())) { // your role as a User
-                            myAcc = register(username, password, emailAddress, phoneNumber, userAddress); // registration
-                            Shop.accountList.add(myAcc);
-
+                    } while (enter == 1);
+                    if (enter == 2) { // login process
+                        String loginUsername;
+                        String loginCompanyName;
+                        String loginPassword;
+                        if (role.equals(Roles.USER.toString())) { // login as a User
+                            do {
+                                System.out.println("== Login ==");
+                                System.out.print("Username: ");
+                                loginUsername = scan.next();
+                                System.out.print("Password: ");
+                                loginPassword = scan.next();
+                                myAcc = AccountManagement.login(loginUsername, loginPassword, Shop.accountList);
+                            } while (!loginUsername.equals(myAcc.username) || !loginPassword.equals(myAcc.getPassword()));
+                        } else if (role.equals(Roles.SELLER.toString())) {
+                            do {
+                                System.out.println("== Login ==");
+                                System.out.print("Company name: ");
+                                loginCompanyName = scan.next();
+                                System.out.print("Password: ");
+                                loginPassword = scan.next();
+                                myAcc = AccountManagement.login(loginCompanyName, loginPassword, Shop.accountList);
+                            } while (!loginCompanyName.equals(myAcc.username) || !loginPassword.equals(myAcc.getPassword()));
+                        } else if (role.equals(Roles.ADMIN.toString())) {
                             System.out.println("== Login ==");
-                            String loginUsername;
-                            String loginPassword;
                             do { // user's login
                                 System.out.print("Username: ");
                                 loginUsername = scan.next();
                                 System.out.print("Password: ");
                                 loginPassword = scan.next();
-                                AccountManagement.login(loginUsername, loginPassword, myAcc);
+                                myAcc = AccountManagement.login(loginUsername, loginPassword, Shop.accountList);
                             } while (!loginUsername.equals(myAcc.username) || !loginPassword.equals(myAcc.getPassword()));
-
-
-                        } else if (role.equals(Roles.SELLER.toString())) { // your role as a seller
-                            myAcc = register(username, password);
-                            Shop.accountList.add(myAcc);
-
-                            System.out.println("== Login ==");
-                            String loginUsername;
-                            String loginPassword;
-                            do { // user's login
-                                System.out.print("Username: ");
-                                loginUsername = scan.next();
-                                System.out.print("Password: ");
-                                loginPassword = scan.next();
-                                AccountManagement.login(loginUsername, loginPassword, myAcc);
-                            } while (!loginUsername.equals(myAcc.username) || !loginPassword.equals(myAcc.getPassword()));
-
-
-                        } else if (role.equals(Roles.ADMIN.toString())) { // your role as an admin
-                            myAcc = register(username, password, emailAddress);
-                            Shop.accountList.add(myAcc);
-
-                            System.out.println("== Login ==");
-                            String loginUsername;
-                            String loginPassword;
-                            do { // user's login
-                                System.out.print("Username: ");
-                                loginUsername = scan.next();
-                                System.out.print("Password: ");
-                                loginPassword = scan.next();
-                                AccountManagement.login(loginUsername, loginPassword, myAcc);
-                            } while (!loginUsername.equals(myAcc.username) || !loginPassword.equals(myAcc.getPassword()));
+                        } else {
+                            System.out.println("No " + role + " exist!");
                         }
                     }
 
 
                     if (role.equals(Roles.USER.toString())) {
-                        System.out.println("Welcome " + Shop.accountList.getLast().username + ".");
+                        System.out.println("Welcome " + myAcc.username + ".");
+
 
 
                         // getting the menu of the shop
@@ -223,11 +192,11 @@ public class Main {
 
                     } else if (role.equals(Roles.SELLER.toString())) {
 
-                        System.out.println("Welcome, Mr.Seller in " + Shop.accountList.getLast().getCompanyName()+" company!");
+                        System.out.println("Welcome, Mr.Seller in " + myAcc.getCompanyName()+" company!");
 
 
                     } else if (role.equals(Roles.ADMIN.toString())) {
-                        System.out.println("Welcome " + Shop.accountList.getLast().username + ".");
+                        System.out.println("Welcome " + myAcc.username + ".");
 
 
                         System.out.println("Select a page of your choice! \n1.Edit Profile");

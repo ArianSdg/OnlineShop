@@ -1,26 +1,30 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class AccountManagement implements ProfileEdit {
 
 
-    public static void login(String username, String password,Account account) {
-        if (account.role.equals(Roles.USER)) {
-            if (account.username.equals(username) && account.getPassword().equals(password)) {
-                System.out.println("Login successful!");
-            } else {
-                System.out.println("Failed to login!");
-            }
-        } else if (account.role.equals(Roles.SELLER)) {
-            if (account.getCompanyName().equals(username) && account.getPassword().equals(password)) {
-                System.out.println("Login successful!");
-            } else {
-                System.out.println("Failed to login!");
-            }
-        } else if (account.role.equals(Roles.ADMIN)) {
-            if (account.username.equals(username) && account.getPassword().equals(password)) {
-                System.out.println("Login successful!");
-            } else {
-                System.out.println("Failed to login!");
+    public static Account login(String username, String password, ArrayList<Account> accList) {
+        Account acc = new Account();
+        for (Account account : accList) {
+            if (account.role.equals(Roles.USER)) {
+                if (account.username.equals(username) && account.getPassword().equals(password)) {
+                    System.out.println("Login successful!");
+                    acc = account;
+                }
+            } else if (account.role.equals(Roles.SELLER)) {
+                if (account.getCompanyName().equals(username) && account.getPassword().equals(password)) {
+                    System.out.println("Login successful!");
+                    acc = account;
+                }
+            } else if (account.role.equals(Roles.ADMIN)) {
+                if (account.username.equals(username) && account.getPassword().equals(password)) {
+                    System.out.println("Login successful!");
+                    acc = account;
+                }
             }
         }
+        return acc;
     }
 
 
