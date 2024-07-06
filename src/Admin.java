@@ -10,6 +10,7 @@ public class Admin extends Account {
         this.password = password;
         this.emailAddress = emailAddress;
         this.role = Roles.ADMIN;
+        Shop.accountList.add(this);
     }
 
     public void setPassword(String password) {
@@ -24,5 +25,12 @@ public class Admin extends Account {
     }
     public String getEmailAddress() {
         return emailAddress;
+    }
+
+    public void acceptFundRequest(Request request) {
+        request.user.wallet += request.fund;
+    }
+    public void acceptSellerRequest(Request request) {
+        request.seller.sellerRequest = true;
     }
 }

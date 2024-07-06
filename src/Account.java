@@ -6,6 +6,7 @@ public class Account {
     private String phoneNumber;
     private String address;
     Roles role;
+    double wallet = 0;
 
 
     Account(String username, String password, String emailAddress, String phoneNumber, String address,Roles role) { // constructor for User

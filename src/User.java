@@ -1,10 +1,11 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class User extends Account {
-    ArrayList<Product> shoppingCart;
+    HashMap<Product, Integer> shoppingCart = new HashMap<>(); // the integer/value is the amount of product
     ArrayList<Product> orderList;
     ArrayList<Product> boughtList;
-    private double wallet;
     String username;
     private String password;
     private String emailAddress;
@@ -21,6 +22,7 @@ public class User extends Account {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.role = Roles.USER;
+        Shop.accountList.add(this);
     }
 
     public void setPassword(String password) {
@@ -51,12 +53,12 @@ public class User extends Account {
         return address;
     }
 
-
-    public double getWallet() {
-        return wallet;
-    }
-    public void setWallet(double wallet) {
-        this.wallet = wallet;
+    public void addToShoppingCart(Product product) {
+        if (this.shoppingCart.containsKey(product)) {
+            this.shoppingCart.put(product, this.shoppingCart.get(product) + 1);
+        } else {
+            this.shoppingCart.put(product, 1);
+        }
     }
 
 }
