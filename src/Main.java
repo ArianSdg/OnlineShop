@@ -160,6 +160,7 @@ public class Main {
                             j++;
                         }
 
+                        System.out.println();
                         System.out.println("-----------------------------");
 
                         // getting the menu of the shop
