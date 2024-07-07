@@ -487,10 +487,12 @@ public class Main {
                             case 4: // adding fund to someone
                                 int i = 1;
                                 for (Account acc : Shop.accountList) {
-                                    if (role.equals(Roles.SELLER.toString())) {
-                                        System.out.println(i + "." + acc.getCompanyName());
+                                    if (acc.role.toString().equals(Roles.SELLER.toString())) {
+                                        System.out.println(i + "." + acc.role.toString() + ":" + acc.getCompanyName());
+                                    } else if (acc.role.toString().equals(Roles.USER.toString())) {
+                                        System.out.println(i + "." + acc.role.toString() + ":" + acc.username);
                                     } else {
-                                        System.out.println(i + "." + acc.username);
+                                        System.out.println(i + "." + acc.role.toString() + ":" + acc.username);
                                     }
                                     i++;
                                 }
@@ -535,10 +537,12 @@ public class Main {
                             case 7: // User's/Seller's log
                                 i = 1;
                                 for (Account acc : Shop.accountList) {
-                                    if (role.equals(Roles.SELLER.toString())) {
-                                        System.out.println(i + "." + acc.getCompanyName());
+                                    if (acc.role.toString().equals(Roles.SELLER.toString())) {
+                                        System.out.println(i + "." + acc.role.toString() + ":" + acc.getCompanyName());
+                                    } else if (acc.role.toString().equals(Roles.USER.toString())) {
+                                        System.out.println(i + "." + acc.role.toString() + ":" + acc.username);
                                     } else {
-                                        System.out.println(i + "." + acc.username);
+                                        System.out.println(i + "." + acc.role.toString() + ":" + acc.username);
                                     }
                                     i++;
                                 }
