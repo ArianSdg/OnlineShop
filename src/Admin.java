@@ -27,13 +27,31 @@ public class Admin extends Account {
         return emailAddress;
     }
 
+
     public void acceptFundRequest(Request request) {
         request.user.wallet += request.fund;
     }
     public void acceptSellerRequest(Request request) {
         request.seller.sellerRequest = true;
     }
-    public void acceptBid(Bid bid) {
+
+    public boolean acceptBid(Bid bid) {
+        for (Product product : bid.user.shoppingCart.keySet()) {
+            if (product.amount >= bid.user.shoppingCart.get(product)) {
+                product.amount -= bid.user.shoppingCart.get(product);
+            } else {
+                System.out.println("Not enough product exists in the shop!");
+                return false;
+            }
+        }
         bid.user.wallet -= bid.totalPrice;
+        // extra exercise
+        for (Product product : bid.user.shoppingCart.keySet()) {
+            product.seller.wallet += bid.user.shoppingCart.get(product) * product.price * 0.9;
+            Shop.profit += bid.user.shoppingCart.get(product) * product.price * 0.1;
+        }
+        bid.user.boughtList.putAll(bid.user.shoppingCart);
+        bid.user.shoppingCart.clear();
+        return true;
     }
 }

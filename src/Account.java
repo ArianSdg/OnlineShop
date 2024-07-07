@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Account {
     String username;
     private String companyName;
@@ -7,6 +9,8 @@ public class Account {
     private String address;
     Roles role;
     double wallet = 0;
+
+    ArrayList<String> log = new ArrayList<>();
 
 
     Account(String username, String password, String emailAddress, String phoneNumber, String address,Roles role) { // constructor for User

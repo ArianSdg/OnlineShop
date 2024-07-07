@@ -7,8 +7,8 @@ public class Shop {
 
     static ArrayList<Account> accountList = new ArrayList<>();
     static ArrayList<Product> productList = new ArrayList<>(); // changeable
-    static ArrayList<String> ordersList = new ArrayList<>(); // changeable
-    private static double profit;
+    static ArrayList<Bid> bidsList = new ArrayList<>(); // changeable
+    static double profit;
 
     Shop (String shopName, String address, String shopNumber) { // constructor for shop
         this.shopName = shopName;

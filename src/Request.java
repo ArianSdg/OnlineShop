@@ -25,7 +25,7 @@ public class Request {
         }
     }
 
-    public static void sellerRequest() {
+    public static void showSellerRequest() {
         int i = 1;
         for (Request request : sellerRequest) {
             System.out.println(i + ".Seller's company name: " + request.seller.getCompanyName());

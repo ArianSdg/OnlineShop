@@ -1,20 +1,22 @@
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.Scanner;
 
-public class Product {
+public class Product extends Category {
     public String name;
     double price;
     double amount;
     ArrayList<String> comments = new ArrayList<>();
     String itemData;
-    Category category;
+    Seller seller;
 
-    Product(String name, double price, double amount, String itemData, Category category) {
+    Product(String name, double price, double amount, String itemData, Seller seller) {
+        super();
         this.name = name;
         this.price = price;
         this.amount = amount;
         this.itemData = itemData;
-        this.category = category;
+        this.seller = seller;
         Shop.productList.add(this);
     }
 
@@ -38,4 +40,7 @@ public class Product {
         }
     }
 
+    public void addComment(String s) {
+        this.comments.add(s);
+    }
 }

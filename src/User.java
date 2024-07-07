@@ -4,14 +4,15 @@ import java.util.Scanner;
 
 public class User extends Account {
     HashMap<Product, Integer> shoppingCart = new HashMap<>(); // the integer/value is the amount of product
-    ArrayList<Product> orderList;
-    ArrayList<Product> boughtList;
+    ArrayList<Bid> userBidList = new ArrayList<>();
+    HashMap<Product, Integer> boughtList = new HashMap<>();
     String username;
     private String password;
     private String emailAddress;
     private String phoneNumber;
     private String address;
     Roles role;
+    String log;
 
 
     User(String username, String password, String emailAddress, String phoneNumber, String address) {
@@ -53,12 +54,20 @@ public class User extends Account {
         return address;
     }
 
-    public void addToShoppingCart(Product product) {
+    public void addToShoppingCart(Product product, int amount) {
         if (this.shoppingCart.containsKey(product)) {
-            this.shoppingCart.put(product, this.shoppingCart.get(product) + 1);
+            this.shoppingCart.put(product, this.shoppingCart.get(product) + amount);
+
         } else {
-            this.shoppingCart.put(product, 1);
+            this.shoppingCart.put(product, amount);
         }
     }
 
+    public void removeFromShoppingCart(Product product, int amount) {
+        if (this.shoppingCart.get(product) > amount) {
+            this.shoppingCart.put(product, this.shoppingCart.get(product) - amount);
+        } else {
+            this.shoppingCart.remove(product);
+        }
+    }
 }
