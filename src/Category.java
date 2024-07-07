@@ -6,20 +6,12 @@ public class Category {
     ArrayList<Product> products = new ArrayList<>();
     static ArrayList<Category> categories = new ArrayList<>();
 
-    Category (String name) {
+    Category(String name) {
         this.name = name;
         this.category = this;
-        Category.categories.add(this);
-    }
-    Category () {}
-
-    public static Category findCategory(String name) {
-        for (Category category : categories) {
-            if (category.name.equals(name)) {
-                return new Category(name);
-            }
+        if (categories.size() < 5) {
+            Category.categories.add(this);
         }
-        return null;
     }
 
     public static void showCategory() {
@@ -30,4 +22,5 @@ public class Category {
             i++;
         }
     }
+
 }

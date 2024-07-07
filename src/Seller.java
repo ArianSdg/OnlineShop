@@ -12,6 +12,7 @@ public class Seller extends Account {
         this.companyName = companyName;
         this.password = password;
         this.role = Roles.SELLER;
+        new Request(this);
         Shop.accountList.add(this);
     }
 

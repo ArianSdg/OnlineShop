@@ -10,13 +10,14 @@ public class Product extends Category {
     String itemData;
     Seller seller;
 
-    Product(String name, double price, double amount, String itemData, Seller seller) {
-        super();
+    Product(String name, double price, double amount, String itemData, Seller seller, Category category) {
+        super(category.name);
         this.name = name;
         this.price = price;
         this.amount = amount;
         this.itemData = itemData;
         this.seller = seller;
+        category.products.add(this);
         Shop.productList.add(this);
     }
 

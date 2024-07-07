@@ -12,7 +12,6 @@ public class User extends Account {
     private String phoneNumber;
     private String address;
     Roles role;
-    String log;
 
 
     User(String username, String password, String emailAddress, String phoneNumber, String address) {

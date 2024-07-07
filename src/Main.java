@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
@@ -55,6 +56,14 @@ public class Main {
 
         // first admin of online shop
         Admin firstAdmin = new Admin("Arian", "12345", "Arian@gmail.com");
+
+        // default categories for the shop
+        Category book = new Category("Book");
+        Category computer = new Category("Computer");
+        Category console = new Category("Console");
+        Category kitchen = new Category("Kitchen");
+        Category headphone = new Category("Headphone");
+
 
 
         while (true) {
@@ -134,12 +143,7 @@ public class Main {
                         }
                     }
 
-                    // default categories for the shop
-                    Category book = new Category("Book");
-                    Category computer = new Category("Computer");
-                    Category console = new Category("Console");
-                    Category kitchen = new Category("Kitchen");
-                    Category headphone = new Category("Headphone");
+
 
                     System.out.println("-----------------------");
 
@@ -148,6 +152,13 @@ public class Main {
                         System.out.println("Welcome " + myAcc.username + ".");
 
                         System.out.println("Wallet : " + "$" + myAcc.wallet);
+
+                        System.out.println("List of the items " + myAcc.username + " has bought: ");
+                        int j = 1;
+                        for (Product pr : ((User) myAcc).boughtList.keySet()) {
+                            System.out.print(j + "." + pr.name + " \t");
+                            j++;
+                        }
 
                         System.out.println("-----------------------------");
 
@@ -216,6 +227,7 @@ public class Main {
                                     System.out.print((i) + "." + product.name + "\t");
                                     i++;
                                 }
+                                System.out.println();
 
                                 System.out.print("Select the product you want: ");
                                 int myProductChoice = scan.nextInt();
@@ -224,24 +236,29 @@ public class Main {
                                 Category.categories.get(myCategoryChoice - 1).products.get(myProductChoice - 1).showProduct();
 
 
-                                System.out.println("If you want to see the comments about this product type 1\nIf you want to proceed, type something else!");
+                                System.out.println("If you want to see the comments about this product type 1\nIf you want to proceed, type another number!");
                                 int seeComments = scan.nextInt();
+
                                 if (seeComments == 1) {
                                     Category.categories.get(myCategoryChoice - 1).products.get(myProductChoice - 1).showComments();
                                 } else {
+
                                     System.out.println("1.Add to shopping cart \t2.Add a comment \t3.Back");
                                     int myChoice3 = scan.nextInt();
-                                    if (myChoice3 == 1) {
+
+                                    if (myChoice3 == 1) { // add to shopping cart
                                         System.out.print("Type how many product you want to add: ");
                                         int productAmount = scan.nextInt();
                                         ((User) myAcc).addToShoppingCart(Category.categories.get(myCategoryChoice - 1).products.get(myProductChoice - 1), productAmount);
                                         myAcc.log.add("User, " + myAcc.username + ", has added " + Category.categories.get(myCategoryChoice - 1).products.get(myProductChoice - 1).name + " to their Shopping Cart.");
                                     }
-                                    if (myChoice3 == 2) {
-                                        String comment = scan.next();
+                                    if (myChoice3 == 2) { // add comment
+                                        scan.nextLine();
+                                        String comment = scan.nextLine();
                                         Category.categories.get(myCategoryChoice - 1).products.get(myProductChoice - 1).addComment(comment);
                                     }
-                                    if (myChoice3 == 3) {
+
+                                    if (myChoice3 == 3) { // back to menu
                                         // BACK
                                         continue;
                                     }
@@ -274,11 +291,11 @@ public class Main {
                                 }
                                 break;
                             case 5: // shopping cart
-                                i = 0;
+                                i = 1;
                                 int totalPrice = 0;
                                 for (Product product : ((User) myAcc).shoppingCart.keySet()) {
                                     System.out.println(i + "." + product.name + "\tAmount: " + ((User) myAcc).shoppingCart.get(product));
-                                    totalPrice += ((User) myAcc).shoppingCart.get(product) * product.price;
+                                    totalPrice += ((User) myAcc).shoppingCart.get(product) * product.price; // calculating total price (amount * price)
                                     i += 1;
                                 }
                                 System.out.println("Total price is " + totalPrice);
@@ -286,7 +303,7 @@ public class Main {
                                 System.out.println("1.Buy \t2.Remove from Shopping Cart \t3.Back");
                                 myChoice = scan.nextInt();
                                 if (myChoice == 1) {
-                                    if (myAcc.wallet > totalPrice) {
+                                    if (myAcc.wallet > totalPrice) { // CHECKING IF YOU HAVE ENOUGH MONEY IN YOUR ACCOUNT
                                         ((User) myAcc).userBidList.add(new Bid((User) myAcc, totalPrice));
                                         myAcc.log.add("User, " + myAcc.username + ", has bought all of the products in the Shopping Cart.");
                                     } else {
@@ -316,7 +333,6 @@ public class Main {
                     }
                     while (myAcc instanceof Seller) {
 
-                        new Request((Seller) myAcc);
 
                         System.out.println("Welcome, Mr.Seller in " + myAcc.getCompanyName() + " company!");
 
@@ -324,6 +340,7 @@ public class Main {
                         System.out.println("-----------------------------");
                         System.out.println("Select a page of your choice! \n1.Edit profile\n2.Add and Remove products\n3.Logout");
                         int choice = scan.nextInt();
+
                         if (choice == 1) { // editing profile
                             System.out.println("Which one do you want to change? 1.Company name 2.Password");
                             enter = scan.nextInt();
@@ -341,6 +358,7 @@ public class Main {
                             }
                             myAcc.log.add("Seller, " + myAcc.username + ", has edited their profile");
                         }
+
                         if (choice == 2 && ((Seller) myAcc).sellerRequest) { // add or remove product
                             System.out.println("1.Add product \t2.Remove product");
                             int myChoice = scan.nextInt();
@@ -359,16 +377,15 @@ public class Main {
 
                                 Category.showCategory(); // showing categories
                                 System.out.println("\nSelect the category number you want to add item to: ");
-                                int category = scan.nextInt();
+                                int categoryNumber = scan.nextInt();
 
-                                Product newProduct = new Product(productName, productPrice, productAmount, productInfo, (Seller) myAcc);
+                                Product newProduct = new Product(productName, productPrice, productAmount, productInfo, (Seller) myAcc, Category.categories.get(categoryNumber - 1));
                                 ((Seller) myAcc).products.add(newProduct);
-                                Category.categories.get(category - 1).products.add(newProduct);
 
 
-                                System.out.println(newProduct.name + " added successfully in --" + Category.categories.get(category - 1).name + "-- category.");
+                                System.out.println(newProduct.name + " added successfully in --" + Category.categories.get(categoryNumber - 1).name + "-- category.");
 
-                                myAcc.log.add("Seller, " + myAcc.username + " , has added " + newProduct.name + " to" + Category.categories.get(category - 1).name + " category.");
+                                myAcc.log.add("Seller, " + myAcc.username + " , has added " + newProduct.name + " to" + Category.categories.get(categoryNumber - 1).name + " category.");
                             }
                             if (myChoice == 2) { // Removing product
 
@@ -380,19 +397,11 @@ public class Main {
                                 System.out.println("Products in --" + Category.categories.get(categoryNumber - 1).name + "-- category");
                                 for (Product product : Category.categories.get(categoryNumber - 1).products) {
                                     System.out.println(i + ".Product name: " + product.name + "\tProduct price " + product.price + "\tProduct amount: " + product.amount + "\tProduct info: " + product.itemData);
+                                    i++;
                                 }
-                                System.out.print("Which of the products above do you want to remove?: ");
+                                System.out.print("Which of the products above do you want to remove? ");
                                 int productChoice = scan.nextInt();
 
-//                                System.out.println("Type your product info.");
-//                                System.out.print("1.Product name: ");
-//                                String productName = scan.next();
-//                                System.out.print("2.Product price: ");
-//                                double productPrice = scan.nextDouble();
-//                                System.out.print("3.Product amount: ");
-//                                double productAmount = scan.nextDouble();
-//                                System.out.print("4.Product information: ");
-//                                String productInfo = scan.next();
 
                                 Product selectedProduct = Category.categories.get(categoryNumber - 1).products.get(productChoice - 1);
 
@@ -401,7 +410,8 @@ public class Main {
                                 if (selectedProduct.amount > removeAmount) {
                                     selectedProduct.amount -= removeAmount;
                                     ((Seller)myAcc).products.get(productChoice - 1).amount -= removeAmount;
-                                    System.out.println(removeAmount + " of " + selectedProduct.name + " was removed from" + Category.categories.get(categoryNumber) + " category.");
+                                    System.out.println(removeAmount + " of " + selectedProduct.name + " was removed from" + Category.categories.get(categoryNumber).name + " category.");
+                                    selectedProduct.amount -= removeAmount;
                                     myAcc.log.add("Seller, " + myAcc.username + ", removed " + removeAmount + " " + selectedProduct.name + " from the Shop.");
                                 } else {
                                     ((Seller) myAcc).products.remove(selectedProduct);
@@ -425,12 +435,13 @@ public class Main {
                     while (myAcc instanceof Admin) {
                         System.out.println("Welcome " + myAcc.username + ".");
 
+                        System.out.println("Total Profit: " + Shop.profit);
 
                         System.out.println("Select a page of your choice! \n1.Edit Profile\n2.Seller's Request\n3.Fund requests from user\n4.Add fund to someone\n5.Promote to admin\n6.Bids\n7.User/Seller log\n8.Logout");
                         int choice = scan.nextInt();
                         String finishChanging;
                         switch (choice) {
-                            case 1:
+                            case 1: // editing profile
                                 do {
                                     System.out.println("1.Change username.\n2.Change password.\n3.Change email address.\n4.Change Phone number.\n5.Change address.");
                                     int changeChoice = scan.nextInt();
@@ -456,14 +467,15 @@ public class Main {
 
                                 } while (!finishChanging.equals("finish"));
                                 break;
-                            case 2:
+                            case 2: // seller's request
                                 Request.showSellerRequest();
+                                System.out.println("Select a request to accept: ");
                                 int myChoice = scan.nextInt();
                                 ((Admin) myAcc).acceptSellerRequest(Request.sellerRequest.get(myChoice - 1));
                                 Request.sellerRequest.remove(myChoice - 1);
                                 System.out.println("request accepted!");
                                 break;
-                            case 3:
+                            case 3: // fund requests
                                 Request.fundRequest();
                                 System.out.println("Select the number of fund request of your choice: ");
                                 myChoice = scan.nextInt();
@@ -471,7 +483,17 @@ public class Main {
                                 Request.fundRequests.remove(myChoice - 1);
                                 System.out.println("Fund request accepted!");
                                 break;
-                            case 4:
+                            case 4: // adding fund to someone
+                                int i = 1;
+                                for (Account acc : Shop.accountList) {
+                                    if (role.equals(Roles.SELLER.toString())) {
+                                        System.out.println(i + "." + acc.getCompanyName());
+                                    } else {
+                                        System.out.println(i + "." + acc.username);
+                                    }
+                                    i++;
+                                }
+
                                 System.out.print("Search the username you want: ");
                                 String searchUsername = scan.next();
                                 System.out.println("Type the amount of fund you want to add: ");
@@ -479,15 +501,28 @@ public class Main {
                                 Shop.searchAccount(searchUsername).wallet += addFund;
                                 System.out.println("New balance: " + Shop.searchAccount(searchUsername).wallet);
                                 break;
-                            case 5:
-                                System.out.print("Search the username you want to promote: ");
-                                searchUsername = scan.next();
-                                Account newAdmin = Shop.searchAccount(searchUsername);
-                                new Admin(newAdmin.username, newAdmin.getPassword(), newAdmin.getEmailAddress());
-                                Shop.accountList.remove(newAdmin);
-                                System.out.println(newAdmin.username + " has promoted to Admin :D");
+                            case 5: // promote to admin
+                                System.out.println("1.Promote an existing account to an Admin  \t2.Register a new account as an Admin");
+                                int promoteChoice = scan.nextInt();
+                                if (promoteChoice == 1) {
+                                    System.out.print("Search the username you want to promote: ");
+                                    searchUsername = scan.next();
+                                    Account newAdmin = Shop.searchAccount(searchUsername);
+                                    new Admin(newAdmin.username, newAdmin.getPassword(), newAdmin.getEmailAddress());
+                                    Shop.accountList.remove(newAdmin);
+                                    System.out.println(newAdmin.username + " has promoted to Admin :D");
+                                }
+                                if (promoteChoice == 2) { // register as a new admin
+                                    System.out.println("== Register as an Admin ==");
+                                    String adminUsername = "";
+                                    String adminPassword = "";
+                                    String adminEmail = "";
+
+                                    register(adminUsername, adminPassword, adminEmail);
+                                    System.out.println("Registration completed.");
+                                }
                                 break;
-                            case 6:
+                            case 6: // User's bids
                                 Bid.showBids();
                                 choice = scan.nextInt();
                                 Bid currentBid = Shop.bidsList.get(choice - 1);
@@ -496,17 +531,27 @@ public class Main {
                                 Shop.bidsList.remove(choice - 1);
                                 currentBid.user.userBidList.remove(currentBid);
                                 break;
-                            case 7:
+                            case 7: // User's/Seller's log
+                                i = 1;
+                                for (Account acc : Shop.accountList) {
+                                    if (role.equals(Roles.SELLER.toString())) {
+                                        System.out.println(i + "." + acc.getCompanyName());
+                                    } else {
+                                        System.out.println(i + "." + acc.username);
+                                    }
+                                    i++;
+                                }
+
                                 System.out.print("Enter the username which you want to see the log from: ");
                                 searchUsername = scan.next();
                                 Account acc = Shop.searchAccount(searchUsername);
-                                int i = 1;
+                                i = 1;
                                 for (String s : acc.log) {
                                     System.out.println(i + "." + s);
                                     i++;
                                 }
                                 break;
-                            case 8:
+                            case 8: // logout
                                 myAcc = null;
                                 break;
                         }
