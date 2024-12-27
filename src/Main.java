@@ -50,9 +50,6 @@ public class Main {
 
     public static <i> void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-        Shop shop1 = new Shop("ArianKala", "www.ariankala.com", "09906431994");
-        Shop shop2 = new Shop("ZohaKala", "www.zohakala.com", "09906431995");
-        System.out.println("Enter your desired website Address.");
 
         // first admin of online shop
         Admin firstAdmin = new Admin("Arian", "12345", "Arian@gmail.com");
